@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
+import {Link} from 'react-router-dom'
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -112,7 +113,9 @@ const Home = () => {
         </CardActions>
       </Card>
      <Tooltip title="Create a Post" style={{fontSize:'2.5rem'}} aria-label="add" >
-     <AddCircle style={{ fontSize: '3.5em', right:'8px', bottom:0, position: 'fixed', color: '#0d47a1' }}/>
+     <Link to='/createpost'>
+     <AddCircle style={{ fontSize: '1.5em', right:'8px', bottom:0, position: 'fixed', color: '#0d47a1' }}/>
+     </Link>
      </Tooltip>
      </div>
   );
