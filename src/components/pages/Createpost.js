@@ -49,8 +49,8 @@ const Createpost = () => {
         <div className={classes.maindiv}>
              <Card className={classes.root}>
         <CardContent>
-          <Typography gutterTop variant="h5" component="h2">
-            Social App
+          <Typography gutterTop variant="h5" component="h2" style={{fontWeight:600}}>
+            Create a Post
           </Typography>
 
           <Typography className={classes.inputGap}>
@@ -81,7 +81,7 @@ const Createpost = () => {
             />
           </Typography>
 
-          <Button variant="contained" color="primary" style={{fontSize:'1.5rem'}}>
+          <Button variant="contained" color="primary" style={{fontSize:'1.2rem'}}>
             Post
           </Button>
         </CardContent>

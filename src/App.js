@@ -5,6 +5,7 @@ import Signin from "./components/pages/Signin";
 import Signup from "./components/pages/Signup";
 import Profile from "./components/pages/Profile";
 import Createpost from "./components/pages/Createpost";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

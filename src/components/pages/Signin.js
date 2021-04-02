@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -8,7 +8,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const useStyles = makeStyles({
   root: {
@@ -45,6 +46,36 @@ const useStyles = makeStyles({
 const Signin = () => {
   const classes = useStyles();
 
+  const history = useHistory()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const PostData =()=>{
+    console.log(password, email);
+    fetch('/signin',{
+      method:'post',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify({
+        email,
+        password
+      })
+    }).then(
+      res => res.json()
+      ).then(data=>{
+        console.log(data);
+        if(data.error){
+          toast.error(data.error)
+        }
+        else{
+          toast.success("Login Successfully");
+          history.push('/')
+          
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+  }
   return (
     <div className={classes.maindiv}>
       <Card className={classes.root}>
@@ -60,6 +91,8 @@ const Signin = () => {
               type="email"
               variant="outlined"
               className={classes.testField}
+              value={email}
+              onChange={(e)=>setEmail(e.target.value) }
             />
           </Typography>
 
@@ -71,10 +104,12 @@ const Signin = () => {
               variant="outlined"
               type="password"
               className={classes.testField}
+              value={password}
+              onChange={(e)=> setPassword(e.target.value) }
             />
           </Typography>
 
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={()=>PostData()}>
             Sign In
           </Button>
         </CardContent>
@@ -84,6 +119,7 @@ const Signin = () => {
           <Link> forgot Password</Link>
         </CardActions>
       </Card>
+      <ToastContainer/>
     </div>
   );
 };
