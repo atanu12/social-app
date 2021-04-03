@@ -68,6 +68,8 @@ const Signin = () => {
           toast.error(data.error)
         }
         else{
+          localStorage.setItem('jwt',data.token)
+          localStorage.setItem("user", JSON.stringify(data.user))
           toast.success("Login Successfully");
           history.push('/')
           

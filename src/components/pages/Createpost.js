@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
@@ -49,28 +49,13 @@ const Createpost = () => {
     const [image, setImage] = useState("")
     const [url, setUrl] = useState()
 
-
-    const postDetails =()=>{
-      const data = new FormData()
-      data.append('file',image);
-      data.append("upload_preset","social-app");
-      data.append("cloud_name","social-app-atanu")
-      fetch('https://api.cloudinary.com/v1_1/social-app-atanu/image/upload',{
-        method:'post',
-        body:data
-      }).then(
-        res=> res.json()
-        ).then(data=>{
-          // passing the image url
-          setUrl(data.url)
-        }).catch(err=>{
-          console.log(err);
-        })
-
+    useEffect(()=>{
+      if(url){
         fetch('/createpost',{
           method:'post',
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": "Bearer "+localStorage.getItem("jwt")
           },
           body:JSON.stringify({
             title,
@@ -89,6 +74,25 @@ const Createpost = () => {
         }).catch(err=>{
           console.log(err);
         })
+      }
+    },[url])
+
+    const postDetails =()=>{
+      const data = new FormData()
+      data.append('file',image);
+      data.append("upload_preset","social-app");
+      data.append("cloud_name","social-app-atanu")
+      fetch('https://api.cloudinary.com/v1_1/social-app-atanu/image/upload',{
+        method:'post',
+        body:data
+      }).then(
+        res=> res.json()
+        ).then(data=>{
+          // passing the image url
+          setUrl(data.url)
+        }).catch(err=>{
+          console.log(err);
+        })  
     }
     return (
         <div className={classes.maindiv}>
