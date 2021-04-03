@@ -4,8 +4,9 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import { toast,ToastContainer } from 'react-toastify';
 
 
 const useStyles = makeStyles({
@@ -41,13 +42,57 @@ const useStyles = makeStyles({
   });
 
 const Createpost = () => {
+  const history = useHistory()
     const classes = useStyles()
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [image, setImage] = useState("")
+    const [url, setUrl] = useState()
 
+
+    const postDetails =()=>{
+      const data = new FormData()
+      data.append('file',image);
+      data.append("upload_preset","social-app");
+      data.append("cloud_name","social-app-atanu")
+      fetch('https://api.cloudinary.com/v1_1/social-app-atanu/image/upload',{
+        method:'post',
+        body:data
+      }).then(
+        res=> res.json()
+        ).then(data=>{
+          // passing the image url
+          setUrl(data.url)
+        }).catch(err=>{
+          console.log(err);
+        })
+
+        fetch('/createpost',{
+          method:'post',
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            title,
+            body,
+            pic:url
+          })
+        }).then(res=>res.json())
+        .then(data=>{
+          console.log(data);
+          if(data.error){
+            toast.error(data.error)
+          }else{
+            toast.success("Posted Successfully")
+            history.push('/')
+          }
+        }).catch(err=>{
+          console.log(err);
+        })
+    }
     return (
         <div className={classes.maindiv}>
+          <ToastContainer/>
              <Card className={classes.root}>
         <CardContent>
           <Typography gutterTop variant="h5" component="h2" style={{fontWeight:600}}>
@@ -83,12 +128,12 @@ const Createpost = () => {
               label="uplode photo"
               type="file"
               className={classes.testField}
-              value={image}
-              onChange={(e)=>console.log(e.target.value)}
+              
+              onChange={(e)=>setImage(e.target.files[0])}
             />
           </Typography>
 
-          <Button variant="contained" color="primary" style={{fontSize:'1.2rem'}}>
+          <Button variant="contained" color="primary" style={{fontSize:'1.2rem'}}  onClick={()=>postDetails()}>
             Post
           </Button>
         </CardContent>
