@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
+import {UserContext} from '../../App'
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -44,8 +45,8 @@ const useStyles = makeStyles({
 });
 
 const Signin = () => {
+  const {state,dispatch} = useContext(UserContext)
   const classes = useStyles();
-
   const history = useHistory()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,6 +71,7 @@ const Signin = () => {
         else{
           localStorage.setItem('jwt',data.token)
           localStorage.setItem("user", JSON.stringify(data.user))
+          dispatch({type:"USER",payload:data.user})
           toast.success("Login Successfully");
           history.push('/')
           
